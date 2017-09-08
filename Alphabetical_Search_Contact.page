@@ -30,23 +30,29 @@
         </apex:Form>
         <apex:Form >
         <apex:outputPanel id="ContactDetails" >
-        <apex:pageBlock title="Contact" rendered="{!newListContact.size!=0}">
+        <apex:pageBlock title="Contact" rendered="{!flagNew}">
             <apex:repeat value="{!listAlphabet}" var="variableAlphabet">
-                <apex:commandLink  value="{!variableAlphabet}" action="{!contactFilter}">
+                <apex:commandLink value="{!variableAlphabet}" action="{!contactFilter}">
                     <apex:param name="alpha" value="{!variableAlphabet}" assignTo="{!filterAlphabet}"/>            
                 </apex:commandLink>
                 <apex:outputText >  |  </apex:outputText>
              </apex:repeat>
+            <apex:outputPanel id="FilteredContact">
             <apex:actionFunction Name="SearchContacts" action="{!displayContact}"  />
+            <apex:pageBlock rendered="{!listContact.size!=0}">
              <apex:pageBlockTable value="{!listContact}" var="contactlist" id="conlist" title="Contact">
                 <apex:column value="{!contactlist.Name}"/>
                 <apex:Column value="{!contactlist.LastName}" />
                 <apex:Column headerValue="">
-                    <apex:commandLink rerender="ContactDetails" value="Delete Record" onclick="deletecontactrow('{!contactlist.id}');" >
+                    <apex:commandLink rerender="FilteredContact" value="Delete Record" onclick="deletecontactrow('{!contactlist.id}'); return false;" >
                     <apex:param value="{!contactlist.id}" assignTo="{!contactId}"/> 
                     </apex:commandLink>
                 </apex:Column>
             </apex:pageBlockTable>
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!flagOther}">No Records found</apex:pageBlock>
+                </apex:outputPanel>
+                
             </apex:pageBlock>
             <apex:pageBlock rendered="{!flag}">No Records found</apex:pageBlock>
     </apex:outputPanel>
@@ -61,20 +67,11 @@ function onenter(ev)  {
              }
          }
          
-         function deletecontactrow(eve){
-            console.log('======','enter');
-            AccountAdvanceController.deleteContact(
-            eve,
-            function(results,event){
-                
-                if(event.type=='exception'){
-                    console.log('exception');
-                }
-                alert('The Contact has been deleted.');
-                console.log('alert');
-                SearchContacts();
-                 }
-         );
-        };
+         function deletecontactrow(eve) {
+	console.log('======','enter');
+	    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AccountAdvanceController.deleteContact}',eve,function(result,event){if(result) 	
+            console.log(result+eve);alert(eve+'The contact has been deleted');},{ buffer: false, escape: true, timeout: 30000 });
+			SearchContacts();
+    }
     </script>
 </apex:page>
