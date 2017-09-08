@@ -1,0 +1,33 @@
+<apex:page Controller="StudentRecordController" language="{!newLanguage}">  
+  <apex:form >
+    <apex:pageMessages /> <!-- this is where the error messages will appear -->
+    <apex:pageBlock>
+    <apex:pageblockSection id="pbs1">
+                Input Pick-List:
+                <apex:selectList size="1" id="intext1" value="{!selectedLanguage}" >
+                <apex:actionSupport event="onchange" action="{!afterSelectedLanguage}" reRender="form"/>
+                    <apex:selectOptions value="{!Languages}"/>
+                </apex:selectList>
+            </apex:pageblockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Student Record">
+
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!saveRecord}" value="Save"/>
+      </apex:pageBlockButtons>
+
+      <apex:pageBlockSection showHeader="false" columns="2" id ="form">
+        <apex:inputField value="{!studentRecord.Student_Name__c}" />
+        <apex:inputField value="{!studentRecord.Roll_Number__c}" />
+        <apex:inputField value="{!studentRecord.Gender__c}" />
+        <apex:inputField value="{!studentRecord.Course__c}" />
+        <apex:inputField value="{!studentRecord.HSC__c}" />
+        <apex:inputField value="{!studentRecord.SSC__c}" />
+        <apex:inputField value="{!studentRecord.City__c}" />
+        <apex:inputField value="{!studentRecord.State__c}" />
+        <apex:inputField value="{!studentRecord.Country__c}" />
+      </apex:pageBlockSection>
+
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>
