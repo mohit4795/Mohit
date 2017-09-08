@@ -1,0 +1,136 @@
+<apex:page applyBodyTag="false" standardController="Invoice_Statement__c" renderAs="PDF" extensions="BestPractice_2_PDf">   
+    <head>
+        <style type="text/CSS">
+            .hide
+            {
+                border-bottom-style:hidden;
+            }
+            .borderbottom
+            {
+                border-bottom-style:hidden;
+                border-color:white;
+            }
+            .columnHeight
+            { 
+                height:90px;
+                padding-top:0px;
+                margin-top:0px;
+                border-color:white;
+                padding-bottom: 60px;
+            }
+            .tableHeight
+            {
+                height:200px;
+            }
+            .pageBorder
+            {
+                border-style: solid;
+            }
+            .solid 
+            {
+                height: 180px;
+                padding-left:30px;
+            }
+            .insidediv 
+            {
+                float: left;
+                height: 200px;
+                width:48%;
+            }
+            .lastdiv
+            {
+                padding-left:15px;
+                padding-right:15px;
+            }
+            .float
+            {
+                float: left;
+                height: 200px;
+                width:48%;
+            }
+            .solidNew 
+            {
+                padding-left:30px;
+                height: 140px;
+            }
+            .insidediv
+             {
+                float: left;
+                height: 180px;
+                width:48%;
+             }
+        </style>
+    </head>
+    <div class="pageBorder">
+        <div class="solid">
+            <div  class="insidediv">
+                <h3>{!$Organization.Name}</h3>
+                <table width="50%"  >
+                    <tr height="20px">
+                        <td width="70%">DP Road</td>
+                     </tr>
+                     <tr height="20px">
+                        <td width="70%">Pune,476772</td>
+                     </tr>
+                    <tr height="20px">
+                        <td width="70%">Phone:68768768</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="float">
+                <h2 style="text-align:right;margin-top=-10px;"> <font color="red">INVOICE</font></h2>
+                <table class="tables" border="1px" align="right">
+                    <tr>
+                        <td bgcolor="#c0d7e2"><b>Invoice#</b></td>
+                        <td bgcolor="#c0d7e2"><b>Date</b></td>
+                    </tr>
+                    <tr>
+                        <td>{!listbill[0].Invoice__c}</td>
+                        <td>{!listbill[0].Date__c}.format('yyyy-MM-dd')</td>
+                    </tr>
+               </table>
+            </div>
+        </div>
+        <div class="solidNew" >
+            <table class="tables" border="1px" width="30%" style="padding-top=100px;">
+                <tr><th bgcolor="#c0d7e2">Billed To:</th></tr>
+                    {!listbill[0].Account_Address__r.Name}<br/>
+                    {!listbill[0].Account_Address__r.billingstreet} <br/>
+                    {!listbill[0].Account_Address__r.billingcity} <br/>
+                    {!listbill[0].Account_Address__r.billingState}<br/>
+                    <br/>
+            </table>
+        </div><br/>
+        <div class="lastdiv">
+            <table  cellspacing="0" class="tableHeight" width="100%"  border="1px">
+                <tr >   
+                    <td bgcolor="#c0d7e2" width="60%"><b>DESCRIPTION</b></td>
+                    <td align="right" bgcolor="#c0d7e2"><b>AMOUNT</b></td>
+                </tr>  
+                <tr class="hide">
+                    <td align="left" width="50%" class="borderbottom">ServiceFee</td>
+                    <td align="right" class="borderbottom"><apex:outputfield value="{!listbill[0].Service_Fee_del__c}" /></td>
+                </tr>
+                <tr>
+                    <td align="left" width="50%" class="borderbottom">labor</td>
+                    <td align="right" class="borderbottom"><apex:outputfield value="{!listbill[0].Labor_del__c}" /></td>
+                </tr>
+                <tr>
+                    <td align="left" width="50%" class="borderbottom">Tax</td>
+                    <td align="right" class="borderbottom"><apex:outputfield value="{!listbill[0].Tax_del__c}" /></td>
+                </tr>
+                <tr>
+                    <td align="left" width="50%" class="columnHeight" >Client Discount</td>
+                    <td align="right" class="columnHeight" ><apex:outputfield value="{!listbill[0].New_Client_Discount_del__c}" /></td>
+                </tr>
+                <tr>
+                    <td  align="center"><i>Thank You for your business</i></td>
+                    <td  align="right">TOTAL... <apex:outputfield value="{!listbill[0].Total_del__c}"  /></td>
+                </tr>
+            </table>
+        </div>
+        <p class="lastdiv"> If you have any question about this invoice pleaze contact:- <br/> 
+            <apex:outputfield value="{!listbill[0].Account_Address__r.Name}" />
+        </p> 
+    </div>    
+</apex:page>
