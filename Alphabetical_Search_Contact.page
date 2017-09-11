@@ -1,0 +1,72 @@
+<apex:page Controller="AccountAdvanceController" >
+    <apex:sectionHeader title="Accounts search" id="accSearch"> 
+       <apex:image url="{!$Resource.HeaderImg}" width="50" height="50"/>
+    </apex:sectionHeader>
+     <apex:includeScript value="{!URLFOR($Resource.VFDocument2,'Alphabet.js')}"/>               
+    <apex:form >
+           <apex:pageBlock title="Account Search "> 
+            <apex:actionFunction Name="SearchAccounts" action="{!search}" rerender="AccountDetails"/>        
+            <apex:inputText value="{!searchString}" label="Input" onkeypress="return onenter(event);"  />
+            <apex:commandButton value="Search records" action="{!search}"  /> 
+            <apex:commandLink value="Clear records" action="{!clear}" /> 
+            </apex:pageBlock>   
+            <apex:pageMessages id="errorMessage" />   
+            </apex:form> 
+            <apex:Form >
+             <apex:outputPanel id="AccountDetails" > 
+            <apex:pageBlock title="Account Search Result" rendered="{!listAccount.size!=0}" >       
+                <apex:outputText value="Number of records :{!count}"/>    
+                    <apex:pageblockTable value="{!listAccount}" var="a">
+<!--                     <apex:actionFunction Name="DisplayContacts" action="{!displayContact}" rerender="ContactDetails"/>   -->
+                        <apex:column headerValue="Account Name">
+                            <apex:commandLink value=" {!a.Name}" action="{!displayContact}">
+                            <apex:param name="id" value="{!a.id}" assignTo="{!receiveId}"/>         
+                            </apex:commandLink>                      
+                        </apex:column>
+                        <apex:column value="{!a.id}"/>
+                    </apex:pageBlockTable>
+            </apex:pageblock>
+        </apex:outputPanel>
+        </apex:Form>
+        <apex:Form >
+        <apex:outputPanel id="ContactDetails" >
+        <apex:pageBlock title="Contact" rendered="{!flagNew}">
+            <apex:repeat value="{!listAlphabet}" var="variableAlphabet">
+                <apex:commandLink value="{!variableAlphabet}" action="{!contactFilter}">
+                    <apex:param name="alpha" value="{!variableAlphabet}" assignTo="{!filterAlphabet}"/>            
+                </apex:commandLink>
+                <apex:outputText >  |  </apex:outputText>
+             </apex:repeat>
+            <apex:outputPanel id="FilteredContact">
+            <apex:actionFunction Name="SearchContacts" action="{!displayContact}"  />
+            <apex:pageBlock rendered="{!listContact.size!=0}">
+             <apex:pageBlockTable value="{!listContact}" var="contactlist" id="conlist" title="Contact">
+                <apex:column value="{!contactlist.Name}"/>
+                <apex:Column value="{!contactlist.LastName}" />
+                <apex:Column headerValue="">
+                    <apex:commandLink rerender="FilteredContact" value="Delete Record" onclick="deletecontactrow('{!contactlist.id}'); return false;" >
+                    <apex:param value="{!contactlist.id}" assignTo="{!contactId}"/> 
+                    </apex:commandLink>
+                </apex:Column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!flagOther}">No Records found</apex:pageBlock>
+                </apex:outputPanel>
+                
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!flag}">No Records found</apex:pageBlock>
+    </apex:outputPanel>
+</apex:Form>
+<script>
+function onenter(ev)  {
+            if (window.event && window.event.keyCode == 13 || ev.which == 13) {
+                SearchAccounts();
+                return false;
+             } else {
+                  return true;
+             }
+         }
+         
+         
+    </script>
+</apex:page>
