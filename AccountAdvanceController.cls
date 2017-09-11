@@ -3,7 +3,7 @@
   **/  
 global class AccountAdvanceController
 {
-	 public List <Account> listAccount {get;set;} 
+     public List <Account> listAccount {get;set;} 
      public List <Contact> listContact {get;set;}
      public List <Contact> newListContact {get;set;}
      public String receiveId {get;set;}
