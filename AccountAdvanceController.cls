@@ -16,7 +16,7 @@ global class AccountAdvanceController
      public Integer count {get;set;}
      public List<String> listAlphabet {get; set;}
      public String filterAlphabet {get; set;}   
-    public AccountAdvanceController( ) 
+     public AccountAdvanceController( ) 
      { 
         listAccount=new List<Account>();
         listContact=new List<Contact>();
@@ -54,13 +54,12 @@ global class AccountAdvanceController
       **/ 
      public void displayContact()
      {
-        //contactDisplay=false;
         flagNew=true;
         flag=false;
         listAlphabet = new List<String> {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'All'};
         listContact = [Select name,LastName,Contact.Account.id,id From Contact Where AccountId =: receiveId ];
         if(listContact.size()==0)
-         {
+        {
             flag=true;
         }
         else
@@ -111,8 +110,7 @@ global class AccountAdvanceController
              }   
          } 
          contactObject.accountId=null;
-      // Contact deleteContact =[Select id,Name,Phone,Email From Contact Where Id =: contactId];
-        Database.SaveResult sr=Database.update(contactObject,false);
+         Database.SaveResult sr=Database.update(contactObject,false);
          if(sr.isSuccess())
          {
              return true;
@@ -121,7 +119,6 @@ global class AccountAdvanceController
          {
           	return false;   
          }
-         //delete deleteContact; 
      }
      /**
        *@method that will clear the contact list
@@ -135,7 +132,6 @@ global class AccountAdvanceController
          listContact.clear();
          listAccount=new List<Account>();
          listContact=new List<Contact>();
-         count=0;
-         
+         count=0;         
      } 
 }
