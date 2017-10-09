@@ -1,0 +1,75 @@
+<apex:page controller="DynamicQueryBuilderController">
+    	
+		<apex:pageMessages id="showMessage" rendered="true" />
+		
+			<apex:form >
+				<apex:pageBlock >
+					<apex:outputLabel >Select Object : </apex:outputLabel>
+					
+						<apex:selectList value="{!objectName}" size="1" multiSelect="false" label="Select Object">
+							<apex:selectOptions value="{!objectNameList}" />
+							<apex:actionSupport action="{!setFieldAndOrderLists}" event="onchange" rerender="form,Execution"/>
+						</apex:selectList>
+                </apex:pageBlock>
+				<apex:outputPanel id="form">
+                    <apex:pageBlock rendered="{!toSelectList.size!=0}">
+					<apex:outputLabel >Select Fields : </apex:outputLabel>
+					
+						<apex:panelGrid columns="3" >
+									<apex:selectList value="{!addFieldList}" size="10" multiSelect="true" id="fieldPicklist">
+										<apex:selectOptions value="{!toSelectList}" />
+									</apex:selectList>
+								<apex:panelGroup >
+                                    <br/>
+									<apex:commandButton action="{!add}" value=">>" rerender="form"/><br></br>
+									<br/><br/>		
+                            <apex:commandButton action="{!remove}" value="<<" rerender="form"/>
+								</apex:panelGroup>
+									<apex:selectList value="{!removeFieldList}" size="10" multiSelect="true" disabled="true" label="Selected Fields" id="selectedFields">
+										<apex:selectOptions value="{!selectedList}" />
+									</apex:selectList>
+                    </apex:panelGrid>
+                
+								<apex:outputLabel >Select Record Order By Field : </apex:outputLabel>
+				
+						<apex:selectList value="{!orderByField}" size="1" multiSelect="false" label="Select Order By Field" id="orderByPicklist">
+							<apex:actionSupport action="{!setSearchString}" event="onchange" rerender="formPageBlock"/>
+							<apex:selectOptions value="{!orderByList}" />
+						</apex:selectList>
+            
+					<apex:outputLabel >Sort As : </apex:outputLabel>
+					
+						<apex:selectRadio value="{!recordSortOrder}" label="Select Sort Order">
+							<apex:selectOptions value="{!recordSortOrderList}" />
+							<apex:actionSupport action="{!setSearchString}" event="onchange" rerender="formPageBlock"/>
+						</apex:selectRadio>
+					<apex:outputLabel >Maximum Number of Records to Display : </apex:outputLabel>
+					
+						<apex:selectList value="{!recordLimit}" size="1" multiSelect="false" label="Select Limit">
+							<apex:selectOptions value="{!recordLimitList}" />
+							<apex:actionSupport action="{!setSearchString}" event="onchange" rerender="formPageBlock"/>
+						</apex:selectList>
+					
+					
+						<apex:commandButton action="{!executeQuery}" value="Execute Query" rerender="Execution"/>
+				</apex:pageBlock>	
+                </apex:outputPanel>
+                
+			<apex:outputPanel id="Execution" >
+		<apex:pageMessages id="showMessage" rendered="true" />
+		<apex:pageBlock id="queryPageBlock" title="SOQL Query" rendered="{! searchString != '' && searchString != null}">
+			<apex:outputText value="{!searchString}"></apex:outputText>
+		</apex:pageBlock>
+		<apex:pageBlock id="OutputPageBlock" title="Query Results" rendered="{! sObjectList != null}">
+			<apex:pageBlockTable value="{!sObjectList}" var="sObjectValue">
+				<apex:column headerValue="Record Name" rendered="{!containFieldName }">
+					<apex:outputLink target="_blank" value="https://ap5.salesforce.com/{!sObjectValue['Id']}">{!sObjectValue[nameField]}</apex:outputLink>
+				</apex:column>
+				<apex:repeat value="{!fieldValues}" var="fieldValue">
+					<apex:column value="{!sObjectValue[fieldValue]}" />
+				</apex:repeat>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+    </apex:outputPanel>
+	</apex:form>
+</apex:page>
